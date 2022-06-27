@@ -8,9 +8,7 @@ import com.dev.countrypicker.bottomsheet.listner.IObjectCallback
 import com.dev.countrypicker.bottomsheet.utils.RegionManager
 import com.dev.countrypicker.databinding.ActivityMainBinding
 import com.google.gson.Gson
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding;
     override fun onCreate(savedInstanceState: Bundle?) {

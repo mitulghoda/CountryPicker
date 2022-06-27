@@ -12,9 +12,7 @@ import android.view.View
 import com.dev.countrypicker.bottomsheet.listner.IObjectCallback
 import com.google.android.material.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 open class BaseBottomSheet : BottomSheetDialogFragment(), OnShowListener {
     private var expanded = false
     private var showKeyboard = false

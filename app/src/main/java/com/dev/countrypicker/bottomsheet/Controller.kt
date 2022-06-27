@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.dev.countrypicker.bottomsheet.utils.ActivityLifeCycle
-import dagger.hilt.android.HiltAndroidApp
-@HiltAndroidApp
 class Controller : Application(), LifecycleObserver {
     private var activityLifeCycle = ActivityLifeCycle()
     override fun onCreate() {

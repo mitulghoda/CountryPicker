@@ -12,28 +12,21 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.countrypicker.R
 import com.dev.countrypicker.bottomsheet.listner.IObjectCallback
 import com.dev.countrypicker.bottomsheet.adapter.NewCountryAdapter
 import com.dev.countrypicker.bottomsheet.model.CountryModel
-import com.dev.countrypicker.bottomsheet.viewmodel.CountryViewModel
 import com.dev.countrypicker.databinding.BottomSheetCountriesBinding
-import com.dev.countrypicker.bottomsheet.network.typeCall
 import com.dev.countrypicker.bottomsheet.utils.RegionManager
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class BottomSheetCountry(
     var isFlagVisible: Boolean,
     var isISOCodeVisible: Boolean,
     var isCurrencyVisible: Boolean
 ) : BaseBottomSheet(), TextWatcher, OnEditorActionListener,
     IObjectCallback<CountryModel?> {
-
-    private val viewModel by viewModels<CountryViewModel>()
     private var adapter: NewCountryAdapter? = null
     private var country = ArrayList<CountryModel>()
     private var countryObjectCallback: IObjectCallback<CountryModel>? = null
@@ -93,23 +86,8 @@ class BottomSheetCountry(
     }
 
     private fun getCountryList() {
-        viewModel.getCountries().observe(this) { resource ->
-            resource.status.typeCall(
-                success = {
-                    binding.progressBar.hide()
-                    if (resource.data != null) {
-                        country = resource.data.sortedBy { it.name?.common }
-                            .let { java.util.ArrayList(it) }
-                        adapter?.setData(country)
-                    }
-                },
-                error = {
-                    adapter?.setData(RegionManager.getCountries()!!)
-                    binding.progressBar.hide()
-                },
-                loading = { binding.progressBar.show() }
-            )
-        }
+        adapter?.setData(RegionManager.getCountries()!!)
+        binding.progressBar.hide()
     }
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
