@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.mitul.countrypicker.bottomsheet.model.CountryModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:padding="@dimen/_8sdp">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageView"
+            loadImage="@{data.flags.png}"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_launcher_background"
+            android:scaleType="centerCrop"
+            app:riv_border_color="@color/black"
+            app:riv_corner_radius="@dimen/_14sdp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvISO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_2sdp"
+            android:maxWidth="@dimen/_70sdp"
+            android:text="@{data.countryCode}"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_13sdp"
+            tools:text="+9852" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txt_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/_5sdp"
+                android:text="@{data.name.common}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_13sdp"
+                tools:text="United States Of America" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtContinetal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/_5sdp"
+                android:text="@{data.continetal}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_13sdp"
+                android:visibility="gone"
+                tools:text="Asia" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{data.currency}"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_13sdp"
+            tools:text="GDP" />
+    </LinearLayout>
+</layout>

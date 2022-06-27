@@ -18,7 +18,7 @@
         <item name="bottomSheetStyle">@style/BottomSheetModal</item>
     </style>
     <style name="BottomSheetModal" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/bottom_sheet_background</item>
+        <item name="android:background">@drawable/shape_corner</item>
     </style>
 
 </resources>
