@@ -1,20 +1,23 @@
 # CountryPicker
-Country picker
+
 
 Installation
 
 Step 1. Add the JitPack repository to your build file
 
-allprojects {
-    repositories {
-	...
-	maven { url 'https://jitpack.io' }
-}
+
+	allprojects {
+    		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+			}
 
 
 Step 2. Add the dependency
 
-implementation 'com.github.mitulghoda:CountryPicker:v1.2'
+
+	implementation 'com.github.mitulghoda:CountryPicker:v1.2'
+	
 
 Step 3. How to use
 
