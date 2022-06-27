@@ -7,23 +7,18 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.mitul.countrypicker.R
-import com.mitul.countrypicker.bottomsheet.listner.IObjectCallback
-import com.mitul.countrypicker.bottomsheet.model.CountryModel
+import com.mitul.countrypicker.bottomsheet.listner.ObjectCallback
+import com.mitul.countrypicker.bottomsheet.model.CountryData
 import com.mitul.countrypicker.databinding.CustomItemCountryBinding
 
-class NewCountryAdapter(
-    countries: List<CountryModel>?,
-    countryIObjectCallback: IObjectCallback<CountryModel>?
+class CountryPickerAdapter(
+    var countries: ArrayList<CountryData>?,
+    val viewMap: HashMap<String, Boolean>?,
+    var countryIObjectCallback: ObjectCallback<CountryData>?
 ) :
-    RecyclerView.Adapter<NewCountryAdapter.ViewHolder>(), Filterable {
-    private var countries: MutableList<CountryModel>
-    private var temp: List<CountryModel>
-    private val countryIObjectCallback: IObjectCallback<CountryModel>?
+    RecyclerView.Adapter<CountryPickerAdapter.ViewHolder>(), Filterable {
+    private var temp: List<CountryData>
     var binding: CustomItemCountryBinding? = null
-    fun getItem(position: Int): CountryModel? {
-        return countries[position]
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = CustomItemCountryBinding.bind(
             LayoutInflater.from(parent.context).inflate(R.layout.custom_item_country, parent, false)
@@ -32,21 +27,27 @@ class NewCountryAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val country = countries[position]
+        val country = countries?.get(position)
+        val flag = viewMap?.get("FLAG")
+        val currency = viewMap?.get("CURRENCY")
+        val isoCode = viewMap?.get("ISO")
         holder.binding.data = country
+        holder.binding.tvISO.visibility = View.VISIBLE.takeIf { isoCode == true } ?: View.GONE
+        holder.binding.txtCurrency.visibility = View.VISIBLE.takeIf { currency == true } ?: View.GONE
+        holder.binding.imageView.visibility = View.VISIBLE.takeIf { flag == true } ?: View.GONE
         holder.itemView.setOnClickListener { v: View? ->
-            countryIObjectCallback?.response(
-                countries[holder.adapterPosition]
+            countryIObjectCallback?.result(
+                countries?.get(holder.adapterPosition)
             )
         }
     }
 
     override fun getItemId(position: Int): Long {
-        return countries[position].name.hashCode().toLong()
+        return countries?.get(position)?.name.hashCode().toLong()
     }
 
     override fun getItemCount(): Int {
-        return countries.size
+        return countries?.size ?: 0
     }
 
     class ViewHolder(val binding: CustomItemCountryBinding) : RecyclerView.ViewHolder(
@@ -54,9 +55,9 @@ class NewCountryAdapter(
     )
 
     private inner class Filtration : Filter() {
-        var suggestions: MutableList<CountryModel>? = null
+        var suggestions: MutableList<CountryData>? = null
         override fun convertResultToString(`object`: Any): CharSequence {
-            return (`object` as CountryModel).name.toString()
+            return (`object` as CountryData).name.toString()
         }
 
         override fun performFiltering(charSequence: CharSequence): FilterResults {
@@ -66,21 +67,21 @@ class NewCountryAdapter(
                         .contains(charSequence.toString()) || country.name?.official?.lowercase()!!
                         .contains(charSequence.toString().lowercase())
                 ) {
-                    (suggestions as ArrayList<CountryModel>).add(country)
+                    (suggestions as ArrayList<CountryData>).add(country)
                 }
             }
             val filterResults = FilterResults()
             filterResults.values = suggestions
-            filterResults.count = (suggestions as ArrayList<CountryModel>).size
+            filterResults.count = (suggestions as ArrayList<CountryData>).size
             return filterResults
         }
 
         override fun publishResults(charSequence: CharSequence, results: FilterResults) {
             val result = results.values as List<*>
             if (suggestions != null && result.isNotEmpty()) {
-                countries = ArrayList(suggestions)
+                countries = ArrayList(this.suggestions ?: ArrayList())
             } else {
-                countries.clear()
+                countries?.clear()
             }
             notifyDataSetChanged()
         }
@@ -90,7 +91,7 @@ class NewCountryAdapter(
         return Filtration()
     }
 
-    fun setData(country: ArrayList<CountryModel>) {
+    fun setData(country: ArrayList<CountryData>) {
         countries = country
         temp = country
         notifyDataSetChanged()

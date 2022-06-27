@@ -5,7 +5,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class CountryModel(
+data class CountryData(
     var cca2: String?,
     var cca3: String?,
     var ccn3: String?,

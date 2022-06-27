@@ -4,9 +4,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.dev.countrypicker.databinding.ActivityMainBinding
 import com.google.gson.Gson
-import com.mitul.countrypicker.bottomsheet.listner.IObjectCallback
-import com.mitul.countrypicker.bottomsheet.model.CountryModel
-import com.mitul.countrypicker.bottomsheet.ui.BottomSheetCountry
+import com.mitul.countrypicker.bottomsheet.listner.ObjectCallback
+import com.mitul.countrypicker.bottomsheet.model.CountryData
+import com.mitul.countrypicker.bottomsheet.ui.CountryPicker
+import com.mitul.countrypicker.bottomsheet.utils.RegionManager
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding;
@@ -14,15 +15,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
+        RegionManager.init(this)
         mainBinding.tvCountry.setOnClickListener {
-            val bottomSheetCountry = BottomSheetCountry(true, true, true)
-            bottomSheetCountry.setCountryObjectCallback(object : IObjectCallback<CountryModel> {
-                override fun response(data: CountryModel?) {
+            val countryPicker = CountryPicker()
+            countryPicker.isCurrencyVisible = true
+            countryPicker.isISOCodeVisible = true
+            countryPicker.setCountryObjectCallback(object : ObjectCallback<CountryData> {
+                override fun result(data: CountryData?) {
                     if (data == null) return
                     mainBinding.tvCountry.text = Gson().toJson(data)
                 }
             })
-            bottomSheetCountry.show(this.supportFragmentManager, "select_country")
+            countryPicker.show(this.supportFragmentManager, "select_country")
         }
     }
 

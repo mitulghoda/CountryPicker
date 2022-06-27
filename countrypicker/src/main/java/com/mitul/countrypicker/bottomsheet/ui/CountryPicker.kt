@@ -15,28 +15,25 @@ import android.widget.TextView.OnEditorActionListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mitul.countrypicker.R
-import com.mitul.countrypicker.bottomsheet.listner.IObjectCallback
-import com.mitul.countrypicker.bottomsheet.adapter.NewCountryAdapter
-import com.mitul.countrypicker.bottomsheet.model.CountryModel
+import com.mitul.countrypicker.bottomsheet.listner.ObjectCallback
+import com.mitul.countrypicker.bottomsheet.adapter.CountryPickerAdapter
+import com.mitul.countrypicker.bottomsheet.model.CountryData
 import com.mitul.countrypicker.bottomsheet.utils.RegionManager
 import com.mitul.countrypicker.databinding.BottomSheetCountriesBinding
 
-class BottomSheetCountry(
-    var isFlagVisible: Boolean,
-    var isISOCodeVisible: Boolean,
-    var isCurrencyVisible: Boolean
-) : BaseBottomSheet(), TextWatcher, OnEditorActionListener,
-    IObjectCallback<CountryModel?> {
-    private var adapter: NewCountryAdapter? = null
-    private var country = ArrayList<CountryModel>()
-    private var countryObjectCallback: IObjectCallback<CountryModel>? = null
+class CountryPicker(
+    var isFlagVisible: Boolean = true,
+    var isISOCodeVisible: Boolean = true,
+    var isCurrencyVisible: Boolean = true
+) : CountryPickerBase(), TextWatcher, OnEditorActionListener,
+    ObjectCallback<CountryData?> {
+    private var adapter: CountryPickerAdapter? = null
+    private var country = ArrayList<CountryData>()
+    private var countryObjectCallback: ObjectCallback<CountryData>? = null
     private lateinit var binding: BottomSheetCountriesBinding
-    fun setCountryObjectCallback(countryObjectCallback: IObjectCallback<CountryModel>?) {
+    private var viewMap: HashMap<String, Boolean>? = null
+    fun setCountryObjectCallback(countryObjectCallback: ObjectCallback<CountryData>?) {
         this.countryObjectCallback = countryObjectCallback
-    }
-
-    fun setCountry(country: List<CountryModel>) {
-        this.country = country as ArrayList<CountryModel>
     }
 
     override fun onCreateView(
@@ -57,6 +54,10 @@ class BottomSheetCountry(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.txtTitle.setText(R.string.select_country)
+        viewMap = HashMap()
+        viewMap?.put("FLAG", isFlagVisible)
+        viewMap?.put("ISO", isISOCodeVisible)
+        viewMap?.put("CURRENCY", isCurrencyVisible)
         setRecyclerView()
         getCountryList()
         binding.edtSearch.addTextChangedListener(this)
@@ -72,10 +73,10 @@ class BottomSheetCountry(
                 DividerItemDecoration.VERTICAL
             )
         )
-        adapter = NewCountryAdapter(country, object : IObjectCallback<CountryModel> {
-            override fun response(data: CountryModel?) {
+        adapter = CountryPickerAdapter(country, viewMap, object : ObjectCallback<CountryData> {
+            override fun result(data: CountryData?) {
                 if (countryObjectCallback != null) {
-                    countryObjectCallback!!.response(data)
+                    countryObjectCallback!!.result(data)
                 }
                 hideBottomSheet()
             }
@@ -107,18 +108,19 @@ class BottomSheetCountry(
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        if (countryObjectCallback != null) countryObjectCallback!!.response(null)
+        if (countryObjectCallback != null) countryObjectCallback!!.result(null)
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        if (countryObjectCallback != null) countryObjectCallback!!.response(null)
+        if (countryObjectCallback != null) countryObjectCallback!!.result(null)
     }
 
-    override fun response(data: CountryModel?) {
+    override fun result(data: CountryData?) {
         if (countryObjectCallback != null) {
-            countryObjectCallback!!.response(data)
+            countryObjectCallback!!.result(data)
         }
         hideBottomSheet()
     }
+
 }

@@ -2,7 +2,7 @@ package com.mitul.countrypicker.bottomsheet.utils
 
 import android.content.Context
 import com.google.gson.Gson
-import com.mitul.countrypicker.bottomsheet.model.CountryModel
+import com.mitul.countrypicker.bottomsheet.model.CountryData
 import com.google.gson.reflect.TypeToken
 import java.io.IOException
 import java.io.InputStream
@@ -10,15 +10,15 @@ import java.util.ArrayList
 
 class RegionManager private constructor() {
     private fun loadCountries(context: Context) {
-        countries = Gson().fromJson<List<CountryModel>?>(
+        countries = Gson().fromJson<List<CountryData>?>(
             readJsonFromAsset("new_countries.json", context),
-            object : TypeToken<List<CountryModel?>?>() {}.type
+            object : TypeToken<List<CountryData?>?>() {}.type
         )
     }
 
     companion object {
         private var regionManager: RegionManager? = null
-        private var countries: List<CountryModel>? = null
+        private var countries: List<CountryData>? = null
         val instance: RegionManager?
             get() {
                 if (regionManager == null) regionManager = RegionManager()
@@ -30,12 +30,12 @@ class RegionManager private constructor() {
             regionManager!!.loadCountries(context)
         }
 
-        fun getCountries(): ArrayList<CountryModel>? {
+        fun getCountries(): ArrayList<CountryData>? {
             try {
                 val country = countries?.sortedBy { it.name?.common }?.let { ArrayList(it) }
                 return country?.filter {
                     it.getCountryCode().isNotEmpty()
-                } as ArrayList<CountryModel>?
+                } as ArrayList<CountryData>?
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }

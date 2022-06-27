@@ -8,17 +8,17 @@ import android.view.WindowManager
 import android.content.DialogInterface
 import android.content.res.Resources
 import android.view.View
-import com.mitul.countrypicker.bottomsheet.listner.IObjectCallback
+import com.mitul.countrypicker.bottomsheet.listner.ObjectCallback
 import com.google.android.material.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
-open class BaseBottomSheet : BottomSheetDialogFragment(), OnShowListener {
+open class CountryPickerBase : BottomSheetDialogFragment(), OnShowListener {
     private var expanded = false
     private var showKeyboard = false
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
-    private var dismissIObjectCallback: IObjectCallback<Boolean>? = null
+    private var dismissIObjectCallback: ObjectCallback<Boolean>? = null
     private var bottomSheet: View? = null
-    fun setDismissIObjectCallback(dismissIObjectCallback: IObjectCallback<Boolean>?) {
+    fun setDismissIObjectCallback(dismissIObjectCallback: ObjectCallback<Boolean>?) {
         this.dismissIObjectCallback = dismissIObjectCallback
     }
 
@@ -95,7 +95,7 @@ open class BaseBottomSheet : BottomSheetDialogFragment(), OnShowListener {
 
     private fun updateDismissedListener() {
         if (dismissIObjectCallback == null) return
-        dismissIObjectCallback!!.response(true)
+        dismissIObjectCallback!!.result(true)
         dismissIObjectCallback = null
     }
 }
