@@ -19,15 +19,14 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:maxLines="1"
-        android:textColor="@color/black"
         android:padding="@dimen/_10sdp"
         android:text="@string/title"
+        android:textColor="@color/black"
         android:textSize="@dimen/_15ssp" />
 
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/edt_search"
-        app:drawableTint="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -37,8 +36,10 @@
         android:focusableInTouchMode="true"
         android:hint="@string/search"
         android:imeOptions="actionSearch"
-        android:inputType="textCapWords"
-        android:padding="@dimen/_8sdp" />
+        android:inputType="textPersonName"
+        android:padding="@dimen/_8sdp"
+        app:drawableTint="@color/black" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

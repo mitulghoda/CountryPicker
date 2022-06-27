@@ -62,7 +62,8 @@ class NewCountryAdapter(
         override fun performFiltering(charSequence: CharSequence): FilterResults {
             suggestions = ArrayList()
             for (country in temp) {
-                if (country.name?.official?.lowercase()!!
+                if (country.getCountryCode()
+                        .contains(charSequence.toString()) || country.name?.official?.lowercase()!!
                         .contains(charSequence.toString().lowercase())
                 ) {
                     (suggestions as ArrayList<CountryModel>).add(country)
@@ -91,7 +92,7 @@ class NewCountryAdapter(
 
     fun setData(country: ArrayList<CountryModel>) {
         countries = country
-        temp=country
+        temp = country
         notifyDataSetChanged()
     }
 
